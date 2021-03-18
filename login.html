@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+  <link rel="stylesheet" href="css/login.css">
+  <title>Login</title>
+</head>
+
+<body>
+  <div id="submit">
+    <div class="google-icon-wrapper">
+      <img class="google-icon" src="icon/google_logo.svg" />
+    </div>
+    <p class="btn-text"><b>Sign in with google</b></p>
+  </div>
+</body>
+<script src="js/config.js"></script>
+<script>
+  const submit = document.querySelector('#submit');
+  if (localStorage.getItem('fuid')) {
+    submit.remove();
+    location.replace('account.html');
+  } else {
+    const submit = document.querySelector('#submit');
+    submit.onclick = () => _app.signin();
+  }
+</script>
+
+</html>

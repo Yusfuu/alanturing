@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add question</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="css/account.css">
+</head>
+
+<body>
+    <img class="bd-img" src="img/icon/Rectangle_8.svg" alt="">
+    <section class="top-bar">
+        <div id="logout" class="left">
+            <img src="img/icon/5594.png" alt="">
+        </div>
+
+        <div class="right">
+            <h1 id="username"></h1>
+            <img id="userimg" src="#" alt="">
+        </div>
+
+    </section>
+    <section class="section_add_question">
+
+        <div class="QuestionsTxt">Questions</div>
+        <div class="textarea">
+            <textarea class="question_field" name="question_field" id="question_field"
+                placeholder="Type Your Question..." maxlength="400"></textarea>
+            <span class="counter">400</span>
+        </div>
+
+        <div class="submit_btn">
+            <div class="submitTxt">Submit</div>
+        </div>
+    </section>
+
+    <script src="js/config.js"></script>
+    <script>
+        if (!localStorage.getItem('fuid')) {
+            location.replace('login.html');
+        } else {
+            const logout = document.querySelector('#logout');
+            const { uid, uname, email, upic } = JSON.parse(localStorage.getItem('fuid'));
+
+            const username = document.querySelector('#username');
+            const userimg = document.querySelector('#userimg');
+            username.textContent = uname;
+            userimg.src = upic;
+
+            let question_field = document.querySelector(".question_field");
+            let counter = document.querySelector(".counter");
+            let submit_btn = document.querySelector(".submit_btn");
+
+            question_field.addEventListener("input", (_) => {
+                question_field.setAttribute("maxlength", 400);
+
+                let len = question_field.value.length;
+                let char = 400 - len;
+
+                char < 0
+                    ? setStyle("red", "not-allowed")
+                    : setStyle("white", "pointer", char);
+            });
+
+            let setStyle = (c, _c, __c = 0) => {
+                counter.style.color = c;
+                submit_btn.style.cursor = _c;
+                counter.textContent = __c;
+            };
+
+            submit_btn.addEventListener("click", (_) => {
+                if (question_field.value.trim() == '') {
+                    Swal.fire(
+                        'Youcode',
+                        'Ohhh no no no !',
+                        'error'
+                    );
+                    return;
+                }
+                if (question_field.value.length <= 400) {
+                    // saving data
+                    let q = {
+                        question: question_field.value,
+                    };
+
+                    function writeQData(q = {}) {
+                        const db = firebase.database().ref("questions");
+                        db.push(q);
+                    }
+
+                    writeQData(q);
+
+                    Swal.fire(
+                        'Youcode',
+                        'your question has been sent successfully',
+                        'success'
+                    );
+                }
+            });
+
+            logout.onclick = () => _app.logout();
+        }
+
+    </script>
+</body>
+
+</html>
