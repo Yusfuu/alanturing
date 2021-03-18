@@ -17,6 +17,11 @@
   <div class="grid" id="main"></div>
   <div class="desc">Made with ❤️ in Youcode</div>
 </body>
-
+<script>
+  let fuid = JSON.parse(localStorage.getItem('fuid')) || false;
+  if (fuid.uid != "anmi4FuYpcOMpUaifg4KX4rxnIY2") {
+    location.replace("login");
+  }
+</script>
 
 </html>
