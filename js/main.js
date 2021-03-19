@@ -1,5 +1,16 @@
 ((_) => {
+  var audiobg = new Audio("../img/Nintendo Wii - Mii Channel Theme.mp3");
 
+  function playAudio() {
+    audiobg.play();
+  }
+  function pauseAudio() {
+    audiobg.pause();
+  }
+
+    document.getElementById('audioOn').addEventListener("click", function(){
+      playAudio();
+    });
   const firebaseConfig = {
     apiKey: "AIzaSyBkX6D9WIo0s7jYISSJibJwAF4UtK30P88",
     authDomain: "ucode-411cd.firebaseapp.com",
@@ -16,7 +27,9 @@
   const render = (q, qi) => {
     return `<div class="box" data-qi="${qi}">
       <div class="number-box"></div>
-      <div class="question">${q}</div>
+      <div class="question">
+      <pre>${q}</pre>
+      </div>
       <div class="random-number"></div>
       <img class="osu-icon" src="img/icon/osu.png" alt="osu" />
       <img class="question-icon" src="img/icon/help.png" alt="question" />
@@ -52,26 +65,48 @@
             questionIcon.style.transform = "scale(1)";
             question.style.opacity = "1";
             box.classList.remove("bouncing");
+            box.style.backgroundImage = "url('../img/cardfliped.svg')";
             box.classList.add("ani-none");
             box.classList.add("hover-dis");
           }, 2000);
+        }
+        var audioLose = new Audio(
+          "../img/yeahBoy.mp3"
+        );
+        var audioNice = new Audio(
+          "../img/Nicememe.mp3"
+        );
+
+        function losers() {
+          box.style.backgroundImage = "url('../img/cardflipedlose.svg')";
+          audioLose.play();
+          audiobg.pause();
+          setTimeout(() =>{audiobg.play()}, 4000);
+        }
+        function winners() {
+          box.style.backgroundImage = "url('../img/cardflipedwin.svg')";
+          audioNice.play();
+          audiobg.pause();
+           setTimeout(() =>{audiobg.play()}, 4000);
         }
 
         osoIcon.addEventListener("click", () => {
           randomNumber.style.opacity = "1";
           question.style.opacity = "0";
           if (randomNumber.textContent == "") {
-            let random = ~~(Math.random() * (20 - (-10) + 1)) + (-10);
+            let random = ~~(Math.random() * (20 - -10 + 1)) + -10;
             random == 0
-              ? (box.style.background = tie)
+              ? (box.style.backgroundImage = "url('../img/cardfliped0.svg')")
               : random > 0
-                ? (box.style.background = "#60D360")
-                : (box.style.background = "#EC4899");
+              ? losers()
+              : winners()
             randomNumber.innerHTML = random > 0 ? `+${random}` : random;
           }
         });
 
         questionIcon.addEventListener("click", () => {
+          (box.style.backgroundImage = "url('../img/cardfliped.svg')");
+          document.querySelector("#main > div.box.ani-none.hover-dis > div.random-number").style.color="black";
           question.style.opacity = "1";
           randomNumber.style.opacity = "0";
         });
